@@ -1,9 +1,0 @@
-@use "sass:map";
-/// Get the last breakpoint width and set max-width to its value
-/// @param {Map} $breakpoints [$breakpoints] - A map of breakpoints where the key is the name
-/// @access private
-@mixin set-max-width-by-largest-breakpoint($breakpoints: $breakpoints) {
-  $largest-breakpoint: last-map-item($breakpoints);
-
-  max-width: map.get($largest-breakpoint, "width");
-}

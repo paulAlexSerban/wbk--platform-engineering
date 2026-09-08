@@ -1,8 +1,0 @@
-/// Get the infix for a given breakpoint in a list of breakpoints. Useful for generating the size part in a selector, for example: `.prefix--col-sm-2`.
-/// @param {String} $name - The name of the breakpoint
-/// @return {String}
-/// @access public
-
-@function breakpoint-infix($name) {
-  @return "-#{$name}";
-}

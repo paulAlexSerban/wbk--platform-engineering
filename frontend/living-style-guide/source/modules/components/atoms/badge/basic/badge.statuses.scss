@@ -1,9 +1,0 @@
-$cmp: "a-badge";
-
-.#{$cmp} {
-  @include e("base") {
-    &.active {
-      border-color: fx-color($c-blue, carolina-blue);
-    }
-  }
-}

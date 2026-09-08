@@ -1,9 +1,0 @@
-/// Generate media query for the largest breakpoint
-/// @param {Map} $breakpoints [$breakpoints] - A map of breakpoints where the key is the name
-/// @content
-/// @access public
-@mixin largest-breakpoint($breakpoints: $breakpoints) {
-  @include breakpoint(largest-breakpoint-name()) {
-    @content;
-  }
-}

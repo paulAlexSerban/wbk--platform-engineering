@@ -1,6 +1,0 @@
-@function fx-color($color-definition, $color-name) {
-  @if (not map-get($color-definition, $color-name)) {
-    @error "#{$color-name} is not a valid color color-name.";
-  }
-  @return map-get($color-definition, $color-name);
-}

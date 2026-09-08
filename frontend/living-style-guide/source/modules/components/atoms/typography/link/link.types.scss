@@ -1,9 +1,0 @@
-$cmp: "a-link";
-
-.#{$cmp} {
-  @include e("base") {
-    @include m("storybook") {
-      color: fx-color($c-blue, blue-jeans);
-    }
-  }
-}

@@ -1,9 +1,0 @@
-:root {
-  --text-base-color: #{fx-color($c-dark, eerie-black)};
-  --color-link: #{fx-color($c-gray, davys-grey)};
-  --font-weight--hero: 300;
-  --font-weight--heading: 700;
-  --font-weight--button: 400;
-  --text-regular: #{$fontFam-openSans}; /* regular font family */
-  --text-code: #{$fontFam-courierPrime}; /* code family */
-}

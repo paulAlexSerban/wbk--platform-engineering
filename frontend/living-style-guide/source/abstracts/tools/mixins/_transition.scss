@@ -1,7 +1,0 @@
-@mixin transition(
-  $transition-property: all,
-  $transition-time: 1000ms,
-  $method: ease-out
-) {
-  transition: $transition-property $transition-time $method;
-}
