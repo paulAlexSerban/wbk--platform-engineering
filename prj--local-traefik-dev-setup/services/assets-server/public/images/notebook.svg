@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Field notebook">
+  <rect width="160" height="160" fill="#ece6d8"/>
+  <rect x="38" y="24" width="84" height="112" fill="#c9b48a" stroke="#1c1914" stroke-width="3"/>
+  <rect x="50" y="24" width="12" height="112" fill="#8a1f12"/>
+  <line x1="72" y1="44" x2="108" y2="44" stroke="#1c1914" stroke-width="2"/>
+  <line x1="72" y1="60" x2="108" y2="60" stroke="#1c1914" stroke-width="2"/>
+  <line x1="72" y1="76" x2="108" y2="76" stroke="#1c1914" stroke-width="2"/>
+</svg>

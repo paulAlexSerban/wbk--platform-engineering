@@ -1,0 +1,7 @@
+node_modules/
+*.log
+.DS_Store
+.env
+.env.*
+infrastructure/traefik/certs/*.pem
+!infrastructure/traefik/certs/.gitkeep

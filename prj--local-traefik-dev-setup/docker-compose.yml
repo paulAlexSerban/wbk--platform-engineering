@@ -1,0 +1,139 @@
+name: traefik-poc-local
+
+services:
+    postgres:
+        image: postgres:16-alpine
+        container_name: traefik-poc-postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: poc
+            POSTGRES_PASSWORD: poc
+            POSTGRES_DB: products
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./database/init:/docker-entrypoint-initdb.d:ro
+        networks:
+            - local
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U poc -d products']
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+    traefik:
+        image: traefik:v3.7
+        container_name: traefik-poc
+        restart: unless-stopped
+        ports:
+            - '80:80'
+            - '443:443'
+            - '8080:8080'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./infrastructure/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+            - ./infrastructure/traefik/dynamic:/etc/traefik/dynamic:ro
+            - ./infrastructure/traefik/certs:/certs:ro
+        networks:
+            - local
+
+    api:
+        build:
+            context: ./services/api
+        container_name: traefik-poc-api
+        restart: unless-stopped
+        environment:
+            PORT: '4000'
+            DATABASE_URL: postgres://poc:poc@postgres:5432/products
+            CORS_ORIGINS: https://local.app.traefik-poc.local,https://local.site.traefik-poc.local
+        depends_on:
+            postgres:
+                condition: service_healthy
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'node -e "fetch(''http://127.0.0.1:4000/health'').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+                ]
+            interval: 5s
+            timeout: 5s
+            retries: 12
+            start_period: 5s
+        networks:
+            - local
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=traefik-poc-local
+            - traefik.http.routers.api.rule=Host(`local.api.traefik-poc.local`)
+            - traefik.http.routers.api.entrypoints=websecure
+            - traefik.http.routers.api.tls=true
+            - traefik.http.services.api.loadbalancer.server.port=4000
+
+    ssr-site:
+        build:
+            context: ./services/ssr-site
+        container_name: traefik-poc-ssr
+        restart: unless-stopped
+        environment:
+            PORT: '3000'
+            API_INTERNAL_URL: http://api:4000
+            API_PUBLIC_URL: https://local.api.traefik-poc.local
+            ASSETS_PUBLIC_URL: https://local.assets.traefik-poc.local
+            SITE_URL: https://local.site.traefik-poc.local
+            APP_URL: https://local.app.traefik-poc.local
+        depends_on:
+            api:
+                condition: service_healthy
+        networks:
+            - local
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=traefik-poc-local
+            - traefik.http.routers.ssr.rule=Host(`local.site.traefik-poc.local`)
+            - traefik.http.routers.ssr.entrypoints=websecure
+            - traefik.http.routers.ssr.tls=true
+            - traefik.http.services.ssr.loadbalancer.server.port=3000
+
+    spa-app:
+        build:
+            context: ./services/spa-app
+        container_name: traefik-poc-spa
+        restart: unless-stopped
+        environment:
+            VITE_API_URL: https://local.api.traefik-poc.local
+            VITE_ASSETS_URL: https://local.assets.traefik-poc.local
+            VITE_SITE_URL: https://local.site.traefik-poc.local
+            VITE_APP_URL: https://local.app.traefik-poc.local
+            VITE_HMR_HOST: local.app.traefik-poc.local
+            VITE_HMR_CLIENT_PORT: '443'
+            VITE_HMR_PROTOCOL: wss
+        networks:
+            - local
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=traefik-poc-local
+            - traefik.http.routers.spa.rule=Host(`local.app.traefik-poc.local`)
+            - traefik.http.routers.spa.entrypoints=websecure
+            - traefik.http.routers.spa.tls=true
+            - traefik.http.services.spa.loadbalancer.server.port=5173
+
+    assets-server:
+        build:
+            context: ./services/assets-server
+        container_name: traefik-poc-assets
+        restart: unless-stopped
+        networks:
+            - local
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=traefik-poc-local
+            - traefik.http.routers.assets.rule=Host(`local.assets.traefik-poc.local`)
+            - traefik.http.routers.assets.entrypoints=websecure
+            - traefik.http.routers.assets.tls=true
+            - traefik.http.services.assets.loadbalancer.server.port=80
+
+networks:
+    local:
+        name: traefik-poc-local
+
+volumes:
+    postgres_data:

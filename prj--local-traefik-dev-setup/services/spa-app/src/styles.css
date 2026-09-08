@@ -1,0 +1,136 @@
+:root {
+    --paper: #f4efe4;
+    --ink: #1c1914;
+    --muted: #5c564c;
+    --rule: #1c1914;
+    --accent: #8a1f12;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.5;
+}
+
+.masthead,
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.masthead {
+    border-bottom: 3px solid var(--rule);
+}
+
+.kicker {
+    margin: 0 0 0.25rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+h1,
+h2 {
+    margin: 0 0 0.75rem;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+}
+
+nav a {
+    color: inherit;
+}
+
+.lede {
+    font-size: 1.15rem;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+
+.card,
+.editor {
+    border: 1px solid var(--rule);
+    padding: 1rem;
+    background: #fffdf8;
+}
+
+.card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #ece6d8;
+    border: 1px solid var(--rule);
+}
+
+.price {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+}
+
+input,
+textarea,
+select,
+button {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.4rem 0.5rem;
+    font: inherit;
+    border: 1px solid var(--rule);
+    background: #fff;
+}
+
+button {
+    cursor: pointer;
+    width: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.error {
+    color: var(--accent);
+}
+
+@media (max-width: 840px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
